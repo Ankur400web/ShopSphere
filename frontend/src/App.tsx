@@ -1,9 +1,8 @@
-/*import { useState } from 'react'
+import { useState } from 'react'
 import heroImg from './assets/hero.png'
 import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'*/
-import './App.css'
-/*
+import viteLogo from './assets/vite.svg'
+
 function App() {
   const [count, setCount] = useState(0)
 
@@ -116,16 +115,6 @@ function App() {
       <div className="ticks"></div>
       <section id="spacer"></section>
     </>
-  )
-}
-
-export default App*/
-
-function App() {
-  return (
-      <div className="text-4xl font-bold">
-        ShopSphere
-      </div>
   )
 }
 

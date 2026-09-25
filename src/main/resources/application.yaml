@@ -1,3 +1,13 @@
 spring:
-  application:
-    name: ShopSphere
+  datasource:
+    url: jdbc:postgresql://localhost:5432/shopsphere_db
+    username: shopsphere_user
+    password: ${SHOPSPHERE_DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true

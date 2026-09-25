@@ -23,3 +23,15 @@
   --color-error: #dc2626;
   --color-info: #2563eb;
 }
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  overflow-x: hidden;
+}

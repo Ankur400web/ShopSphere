@@ -3,6 +3,7 @@ import NavLink from "../common/NavLink.tsx";
 import IconButton from "../common/IconButton";
 import { useState } from "react";
 import { Menu, ShoppingCart, User, X } from "lucide-react";
+import { Link } from "react-router-dom";
 
 function NavBar() {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -38,9 +39,11 @@ function NavBar() {
                 <div className="flex items-center gap-2">
 
                     {/* Account */}
-                    <IconButton label="Account">
-                        <User size={20} />
-                    </IconButton>
+                    <Link to="/register">
+                        <IconButton label="Account">
+                            <User size={20} />
+                        </IconButton>
+                    </Link>
 
                     <IconButton label="Shopping cart">
                         <ShoppingCart size={20} />

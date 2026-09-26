@@ -1,6 +1,6 @@
 package com.e_commerce.ShopSphere.enums;
 
-public enum Status {
+public enum UserStatus {
     ACTIVE,
     INACTIVE,
     SUSPENDED

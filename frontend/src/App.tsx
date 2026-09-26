@@ -1,13 +1,13 @@
 import Navbar from "./components/layout/NavBar.tsx";
-import HomePage from "./pages/home/HomePage";
+import AppRoutes from "./routes/AppRoutes";
 
 function App() {
-  return (
-      <>
-        <Navbar />
-        <HomePage />
-      </>
-  );
+    return (
+        <>
+            <Navbar />
+            <AppRoutes />
+        </>
+    );
 }
 
 export default App;

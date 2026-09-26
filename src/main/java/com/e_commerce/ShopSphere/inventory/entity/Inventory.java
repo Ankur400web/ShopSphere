@@ -1,4 +1,4 @@
-package com.e_commerce.ShopSphere.inventory;
+package com.e_commerce.ShopSphere.inventory.entity;
 
 import com.e_commerce.ShopSphere.catalog.entity.Product;
 import jakarta.persistence.*;

@@ -1,7 +1,7 @@
 package com.e_commerce.ShopSphere.user.entity;
 
 
-import com.e_commerce.ShopSphere.enums.Status;
+import com.e_commerce.ShopSphere.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,7 +38,7 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Status status;
+    private UserStatus userStatus;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private OffsetDateTime createdAt;

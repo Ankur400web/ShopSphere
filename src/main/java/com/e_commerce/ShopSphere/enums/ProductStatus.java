@@ -1,4 +1,7 @@
 package com.e_commerce.ShopSphere.enums;
 
 public enum ProductStatus {
+    AVAILABLE,
+    OUT_OF_STOCK,
+    DISCONTINUED
 }

@@ -3,11 +3,12 @@ package com.e_commerce.ShopSphere.catalog.service;
 
 import com.e_commerce.ShopSphere.catalog.dto.CategoryResponse;
 import com.e_commerce.ShopSphere.catalog.dto.CreateCategoryRequest;
+import com.e_commerce.ShopSphere.catalog.dto.UpdateCategoryRequest;
 import com.e_commerce.ShopSphere.catalog.entity.Category;
 import com.e_commerce.ShopSphere.catalog.repository.CategoryRepository;
+import com.e_commerce.ShopSphere.common.exception.CategoryHasChildrenException;
 import com.e_commerce.ShopSphere.common.exception.CategoryNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,6 +69,68 @@ public class CategoryService {
         return categories.stream()
                 .map(this::mapToResponse)
                 .toList();
+    }
+
+    public CategoryResponse getCategoryById(Long id){
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(()-> new CategoryNotFoundException("Category doesn't exist"));
+
+        return mapToResponse(category);
+    }
+
+    @Transactional
+    public CategoryResponse updateCategory(
+            Long id,
+            UpdateCategoryRequest request
+    ) {
+
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new CategoryNotFoundException(
+                        "Category not found"
+                ));
+
+        if (!category.getName().equals(request.getName())
+                && categoryRepository.existsByName(request.getName())) {
+            throw new IllegalArgumentException(
+                    "Category with the same name already exists"
+            );
+        }
+
+        Category parentCategory = null;
+
+        if (request.getParentId() != null) {
+
+            parentCategory = categoryRepository.findById(
+                    request.getParentId()
+            ).orElseThrow(() -> new CategoryNotFoundException(
+                    "Parent category not found"
+            ));
+        }
+
+        category.setName(request.getName());
+        category.setDescription(request.getDescription());
+        category.setParentCategory(parentCategory);
+
+        Category updatedCategory = categoryRepository.save(category);
+
+        return mapToResponse(updatedCategory);
+    }
+
+    @Transactional
+    public void deleteCategory(Long id) {
+
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new CategoryNotFoundException(
+                        "Category not found"
+                ));
+
+        if (categoryRepository.existsByParentCategoryId(id)) {
+            throw new CategoryHasChildrenException(
+                    "Category cannot be deleted because it has child categories"
+            );
+        }
+
+        categoryRepository.delete(category);
     }
 
 }

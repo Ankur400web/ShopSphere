@@ -7,4 +7,6 @@ import com.e_commerce.ShopSphere.catalog.entity.Category;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     boolean existsByName(String name);
+
+    boolean existsByParentCategoryId(Long id);
 }

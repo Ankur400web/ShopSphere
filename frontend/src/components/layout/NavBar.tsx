@@ -1,12 +1,16 @@
 import SearchBar from "../common/SearchBar.tsx";
 import NavLink from "../common/NavLink.tsx";
 import IconButton from "../common/IconButton";
-import { useState } from "react";
 import { Menu, ShoppingCart, User, X } from "lucide-react";
 import { Link } from "react-router-dom";
-
+import { useState } from "react";
 function NavBar() {
     const [menuOpen, setMenuOpen] = useState(false);
+    const storedUser = localStorage.getItem("user");
+
+    const user = storedUser
+        ? JSON.parse(storedUser)
+        : null;
     return (
         <nav className="border-b border-border bg-surface">
 
@@ -39,11 +43,28 @@ function NavBar() {
                 <div className="flex items-center gap-2">
 
                     {/* Account */}
-                    <Link to="/register">
-                        <IconButton label="Account">
-                            <User size={20} />
-                        </IconButton>
-                    </Link>
+                    {user ? (
+                        <Link
+                            to="/profile"
+                            className="flex items-center gap-2 px-2 py-1"
+                        >
+                            <div className="leading-tight">
+                                <p className="text-xs text-text-secondary">
+                                    Hello,
+                                </p>
+
+                                <p className="text-sm font-semibold text-text-primary">
+                                    {user.firstName}
+                                </p>
+                            </div>
+                        </Link>
+                    ) : (
+                        <Link to="/login">
+                            <IconButton label="Account">
+                                <User size={20} />
+                            </IconButton>
+                        </Link>
+                    )}
 
                     <IconButton label="Shopping cart">
                         <ShoppingCart size={20} />

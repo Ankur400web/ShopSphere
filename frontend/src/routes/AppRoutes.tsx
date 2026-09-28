@@ -3,6 +3,7 @@ import RegisterPage from "../pages/auth/RegisterPage";
 import HomePage from "../pages/home/HomePage";
 import AuthLayout from "../layouts/AuthLayout";
 import ShopLayout from "../layouts/ShopLayout";
+import LoginPage from "../pages/auth/LoginPage";
 
 const AppRoutes = () => {
     return (
@@ -15,6 +16,7 @@ const AppRoutes = () => {
 
                 <Route element={<AuthLayout />}>
                     <Route path="/register" element={<RegisterPage />} />
+                    <Route path="/login" element={<LoginPage />} />
                 </Route>
 
             </Routes>

@@ -43,9 +43,10 @@ public class AuthService {
         return new LoginResponse(
                 token,
                 "Bearer",
-                user.getId(),
+                user.getRole().getId(),
                 user.getEmail(),
-                user.getRole().getName()
+                user.getRole().getName(),
+                user.getFirstName()
         );
     }
 }

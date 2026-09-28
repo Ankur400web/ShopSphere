@@ -1,0 +1,10 @@
+POST http://localhost:8080/api/v1/categories
+Authorization: Bearer eyJraWQiOiJPTjBleU5fd1NxLUxBMmVxMG5jT25qbGk3bkJUamhEZ0tFNlBEbXVYS1RnIiwidHlwIjoiSldUIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJ2aWthc0BleGFtcGxlLmNvbSIsInJvbGUiOiJVU0VSIiwiZXhwIjoxNzkwNTcyNzMyLCJpYXQiOjE3OTA1NjkxMzJ9.0NacePxKwcHCyauj1d5ViAQnv5VOtYb7qgZpK-cWGww
+Content-Type: application/json
+
+
+{
+  "name": "Electronics",
+  "description": "All kinds of electronic devices and gadgets.",
+  "parentId": null
+}

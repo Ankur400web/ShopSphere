@@ -7,8 +7,11 @@ import com.e_commerce.ShopSphere.catalog.entity.Category;
 import com.e_commerce.ShopSphere.catalog.repository.CategoryRepository;
 import com.e_commerce.ShopSphere.common.exception.CategoryNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -57,6 +60,14 @@ public class CategoryService {
         Category savedCategory = categoryRepository.save(category);
 
         return mapToResponse(savedCategory);
+    }
+
+    public List<CategoryResponse> getAllCategories() {
+        List<Category> categories = categoryRepository.findAll();
+
+        return categories.stream()
+                .map(this::mapToResponse)
+                .toList();
     }
 
 }

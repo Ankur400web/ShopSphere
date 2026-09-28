@@ -16,4 +16,22 @@ export const api = {
 
         return response.json();
     },
+
+    async get<T>(endpoint: string): Promise<T> {
+        const token = localStorage.getItem("token");
+
+        const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`Request failed with status ${response.status}`);
+        }
+
+        return response.json();
+    },
 };

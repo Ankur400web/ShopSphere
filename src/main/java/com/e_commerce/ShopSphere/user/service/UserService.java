@@ -10,6 +10,7 @@ import com.e_commerce.ShopSphere.user.repository.RoleRepository;
 import com.e_commerce.ShopSphere.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.e_commerce.ShopSphere.enums.UserStatus;
@@ -39,6 +40,7 @@ public class UserService {
         User savedUser = userRepository.save(user);
 
         UserResponse response = new UserResponse();
+
         response.setId(savedUser.getId());
         response.setFirstName(savedUser.getFirstName());
         response.setLastName(savedUser.getLastName());
@@ -50,6 +52,24 @@ public class UserService {
 
         return response;
 
+    }
+
+    public UserResponse getCurrentUser(String email){
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+
+        UserResponse response = new UserResponse();
+
+        response.setId(user.getId());
+        response.setFirstName(user.getFirstName());
+        response.setLastName(user.getLastName());
+        response.setEmail(user.getEmail());
+        response.setRoleName(user.getRole().getName());
+        response.setStatus(user.getStatus().name());
+        response.setCreatedAt(user.getCreatedAt());
+        response.setUpdatedAt(user.getUpdatedAt());
+
+        return response;
     }
 
 }

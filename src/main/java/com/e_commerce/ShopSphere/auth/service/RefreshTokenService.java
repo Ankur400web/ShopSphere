@@ -2,6 +2,7 @@ package com.e_commerce.ShopSphere.auth.service;
 
 
 import com.e_commerce.ShopSphere.auth.repository.RefreshTokenRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -81,4 +82,21 @@ public class RefreshTokenService {
 
         return refreshToken;
     }
+
+    @Transactional
+    public void revokeRefreshToken(String rawToken) {
+
+        String tokenHash = hashingToken(rawToken);
+
+        RefreshToken refreshToken = refreshTokenRepository
+                .findByTokenHash(tokenHash)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Invalid refresh token")
+                );
+
+        refreshToken.setRevokedAt(OffsetDateTime.now());
+
+        refreshTokenRepository.save(refreshToken);
+    }
+
 }

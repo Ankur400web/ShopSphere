@@ -1,9 +1,6 @@
 package com.e_commerce.ShopSphere.auth.controller;
 
-import com.e_commerce.ShopSphere.auth.dto.LoginRequest;
-import com.e_commerce.ShopSphere.auth.dto.LoginResponse;
-import com.e_commerce.ShopSphere.auth.dto.MeResponse;
-import com.e_commerce.ShopSphere.auth.dto.RefreshRequest;
+import com.e_commerce.ShopSphere.auth.dto.*;
 import com.e_commerce.ShopSphere.auth.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -54,5 +51,14 @@ public class AuthController {
                 authService.refreshAccessToken(request.getRefreshToken());
 
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(
+            @RequestBody LogoutRequest request
+    ) {
+        authService.logout(request.getRefreshToken());
+
+        return ResponseEntity.noContent().build();
     }
 }

@@ -78,4 +78,8 @@ public class AuthService {
                 user.getFirstName()
         );
     }
+
+    public void logout(String refreshToken) {
+        refreshTokenService.revokeRefreshToken(refreshToken);
+    }
 }

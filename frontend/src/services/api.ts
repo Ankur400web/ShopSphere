@@ -7,20 +7,23 @@ const refreshAccessToken = async (): Promise<string> => {
         throw new Error("No refresh token available");
     }
 
-    const response = await fetch(
-        `${API_BASE_URL}/auth/refresh`,
-        {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                refreshToken,
-            }),
-        }
-    );
+    const response = await fetch(`${API_BASE_URL}/auth/refresh`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            refreshToken,
+        }),
+    });
 
     if (!response.ok) {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("user");
+
+        window.location.href = "/login";
+
         throw new Error("Refresh token expired or invalid");
     }
 
@@ -31,50 +34,76 @@ const refreshAccessToken = async (): Promise<string> => {
     return data.accessToken;
 };
 
-export const api = {
-    async post<T>(endpoint: string, data: unknown): Promise<T> {
-        const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
+const request = async <T>(
+    endpoint: string,
+    options: RequestInit = {}
+): Promise<T> => {
+
+    const accessToken = localStorage.getItem("accessToken");
+
+    const headers = new Headers(options.headers);
+
+    headers.set("Content-Type", "application/json");
+
+    if (accessToken) {
+        headers.set("Authorization", `Bearer ${accessToken}`);
+    }
+
+    let response = await fetch(`${API_BASE_URL}${endpoint}`, {
+        ...options,
+        headers,
+    });
+
+    if (response.status === 401) {
+        const newAccessToken = await refreshAccessToken();
+
+        headers.set("Authorization", `Bearer ${newAccessToken}`);
+
+        response = await fetch(`${API_BASE_URL}${endpoint}`, {
+            ...options,
+            headers,
         });
+    }
 
-        if (!response.ok) {
-            throw new Error(`Request failed with status ${response.status}`);
-        }
+    if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`);
+    }
 
-        return response.json();
-    },
+    return response.json();
+};
+
+export const api = {
 
     async get<T>(endpoint: string): Promise<T> {
-        const token = localStorage.getItem("accessToken");
-
-        let response = await fetch(`${API_BASE_URL}${endpoint}`, {
+        return request<T>(endpoint, {
             method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
         });
+    },
 
-        if (response.status === 401) {
-            const newAccessToken = await refreshAccessToken();
+    async post<T>(endpoint: string, data: unknown): Promise<T> {
+        return request<T>(endpoint, {
+            method: "POST",
+            body: JSON.stringify(data),
+        });
+    },
 
-            response = await fetch(`${API_BASE_URL}${endpoint}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${newAccessToken}`,
-                },
-            });
-        }
+    async put<T>(endpoint: string, data: unknown): Promise<T> {
+        return request<T>(endpoint, {
+            method: "PUT",
+            body: JSON.stringify(data),
+        });
+    },
 
-        if (!response.ok) {
-            throw new Error(`Request failed with status ${response.status}`);
-        }
+    async patch<T>(endpoint: string, data: unknown): Promise<T> {
+        return request<T>(endpoint, {
+            method: "PATCH",
+            body: JSON.stringify(data),
+        });
+    },
 
-        return response.json();
+    async delete<T>(endpoint: string): Promise<T> {
+        return request<T>(endpoint, {
+            method: "DELETE",
+        });
     },
 };

@@ -40,3 +40,29 @@ export const registerUser = (data: RegisterRequest) => {
 
 export const loginUser = (data: LoginRequest) =>
     api.post<LoginResponse>("/auth/login", data);
+
+
+export const logoutUser = async (): Promise<void> => {
+    const refreshToken = localStorage.getItem("refreshToken");
+
+    if (!refreshToken) {
+        return;
+    }
+
+    const response = await fetch(
+        "http://localhost:8080/api/v1/auth/logout",
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                refreshToken,
+            }),
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error("Logout failed");
+    }
+};

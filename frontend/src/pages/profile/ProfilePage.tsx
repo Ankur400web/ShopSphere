@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LogOut } from "lucide-react";
 
+import { logoutUser } from "../../services/authService";
+
 import {
     getCurrentUser,
     type UserResponse,
@@ -14,11 +16,18 @@ const ProfilePage = () => {
 
     const navigate = useNavigate();
 
-    const handleLogout = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
+    const handleLogout = async () => {
+        try {
+            await logoutUser();
+        } catch (error) {
+            console.error("Logout failed:", error);
+        } finally {
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("refreshToken");
+            localStorage.removeItem("user");
 
-        navigate("/login");
+            navigate("/login");
+        }
     };
 
     useEffect(() => {

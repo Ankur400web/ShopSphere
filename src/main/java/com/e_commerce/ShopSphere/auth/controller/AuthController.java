@@ -3,6 +3,7 @@ package com.e_commerce.ShopSphere.auth.controller;
 import com.e_commerce.ShopSphere.auth.dto.LoginRequest;
 import com.e_commerce.ShopSphere.auth.dto.LoginResponse;
 import com.e_commerce.ShopSphere.auth.dto.MeResponse;
+import com.e_commerce.ShopSphere.auth.dto.RefreshRequest;
 import com.e_commerce.ShopSphere.auth.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -43,5 +44,15 @@ public class AuthController {
         return ResponseEntity.ok(
                 new MeResponse(email, role)
         );
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<LoginResponse> refresh(
+            @RequestBody RefreshRequest request
+    ) {
+        LoginResponse response =
+                authService.refreshAccessToken(request.getRefreshToken());
+
+        return ResponseEntity.ok(response);
     }
 }

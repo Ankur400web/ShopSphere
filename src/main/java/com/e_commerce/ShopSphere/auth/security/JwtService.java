@@ -29,4 +29,20 @@ public class JwtService {
                 .encode(JwtEncoderParameters.from(claims))
                 .getTokenValue();
     }
+
+    public String generateAccessToken(String email, String role) {
+
+        Instant now = Instant.now();
+
+        JwtClaimsSet claims = JwtClaimsSet.builder()
+                .subject(email)
+                .issuedAt(now)
+                .expiresAt(now.plusSeconds(900))
+                .claim("role", role)
+                .build();
+
+        return jwtEncoder
+                .encode(JwtEncoderParameters.from(claims))
+                .getTokenValue();
+    }
 }

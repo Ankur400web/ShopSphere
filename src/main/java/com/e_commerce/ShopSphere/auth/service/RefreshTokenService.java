@@ -47,7 +47,7 @@ public class RefreshTokenService {
         }
     }
 
-    private String createRefreshToken(User user){
+    String createRefreshToken(User user){
         String rawToken = generateToken();
         RefreshToken refreshToken = new RefreshToken();
 
@@ -60,5 +60,25 @@ public class RefreshTokenService {
         refreshTokenRepository.save(refreshToken);
 
         return rawToken;
+    }
+
+    public RefreshToken verifyRefreshToken(String rawToken) {
+
+        String tokenHash = hashingToken(rawToken);
+
+        RefreshToken refreshToken = refreshTokenRepository
+                .findByTokenHashAndRevokedAtIsNull(tokenHash)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Invalid refresh token")
+                );
+
+        if (refreshToken.getExpiresAt().isBefore(OffsetDateTime.now())) {
+            throw new IllegalArgumentException("Refresh token has expired");
+        }
+
+        refreshToken.setLastUsedAt(OffsetDateTime.now());
+        refreshTokenRepository.save(refreshToken);
+
+        return refreshToken;
     }
 }

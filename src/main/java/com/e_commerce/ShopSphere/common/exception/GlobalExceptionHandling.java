@@ -101,4 +101,42 @@ public class GlobalExceptionHandling {
                 .status(HttpStatus.CONFLICT)
                 .body(response);
     }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleProductNotFound(
+            ProductNotFoundException ex) {
+
+        ErrorResponse response = new ErrorResponse(
+                404,
+                ex.getMessage(),
+                OffsetDateTime.now(),
+                null
+        );
+
+        return ResponseEntity.status(404).body(response);
+    }
+
+    @ExceptionHandler(DuplicateSkuException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateSku(DuplicateSkuException exception){
+        ErrorResponse response = new ErrorResponse(
+                409,
+                exception.getMessage(),
+                OffsetDateTime.now(),
+                null
+        );
+
+        return ResponseEntity.status(409).body(response);
+    }
+
+    @ExceptionHandler(DuplicateSlugException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateSlug(DuplicateSkuException exception){
+        ErrorResponse response = new ErrorResponse(
+                409,
+                exception.getMessage(),
+                OffsetDateTime.now(),
+                null
+        );
+
+        return ResponseEntity.status(409).body(response);
+    }
 }

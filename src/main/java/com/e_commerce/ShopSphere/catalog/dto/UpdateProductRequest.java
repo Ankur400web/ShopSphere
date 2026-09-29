@@ -28,7 +28,7 @@ public class UpdateProductRequest {
     @DecimalMin(value = "0.01")
     private BigDecimal price;
 
-    @NotBlank
+
     private ProductStatus status;
 
     @NotNull

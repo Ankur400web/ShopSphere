@@ -25,7 +25,8 @@ interface LoginRequest {
 }
 
 interface LoginResponse {
-    token: string;
+    accessToken: string;
+    refreshToken: string;
     tokenType: string;
     roleId: number;
     email: string;
@@ -37,6 +38,5 @@ export const registerUser = (data: RegisterRequest) => {
     return api.post<UserResponse>("/users/register", data);
 };
 
-export const loginUser = (data: LoginRequest) => {
-    return api.post<LoginResponse>("/auth/login", data);
-};
+export const loginUser = (data: LoginRequest) =>
+    api.post<LoginResponse>("/auth/login", data);

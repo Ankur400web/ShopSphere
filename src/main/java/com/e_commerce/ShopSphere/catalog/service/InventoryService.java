@@ -26,7 +26,7 @@ public class InventoryService {
     @Transactional
     public InventoryResponse createInventory(CreateInventoryRequest request){
 
-        if (inventoryRepository.existByProductId(request.getProductId())){
+        if (inventoryRepository.existsByProductId(request.getProductId())){
             throw new DuplicateInventoryException("Inventory already exist");
         }
 
@@ -43,6 +43,7 @@ public class InventoryService {
 
         inventory.setProduct(product);
         inventory.setQuantity(request.getQuantity());
+        inventory.setReservedQuantity(0);
 
         Inventory savedInventory = inventoryRepository.save(inventory);
 
@@ -56,7 +57,7 @@ public class InventoryService {
         response.setId(inventory.getId());
         response.setProductId(inventory.getProduct().getId());
         response.setQuantity(inventory.getQuantity());
-        response.setReservedQuantity(inventory.getReserved_quantity());
+        response.setReservedQuantity(inventory.getReservedQuantity());
         response.setVersion(inventory.getVersion());
         response.setCreatedAt(inventory.getCreatedAt());
         response.setUpdatedAt(inventory.getUpdatedAt());
@@ -93,10 +94,10 @@ public class InventoryService {
             );
         }
 
-        if (request.getQuantity() < inventory.getReserved_quantity()) {
+        if (request.getQuantity() < inventory.getReservedQuantity()) {
             throw new IllegalArgumentException(
                     "Quantity cannot be less than reserved quantity: "
-                            + inventory.getReserved_quantity()
+                            + inventory.getReservedQuantity()
             );
         }
 

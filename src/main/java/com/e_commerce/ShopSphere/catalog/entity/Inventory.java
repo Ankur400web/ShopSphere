@@ -26,8 +26,8 @@ public class Inventory {
     @Column(nullable = false)
     private Integer quantity;
 
-    @Column(nullable = false)
-    private Integer reserved_quantity;
+    @Column(name = "reserved_quantity", nullable = false)
+    private Integer reservedQuantity;
 
     @Version
     @Column(nullable = false)

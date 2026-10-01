@@ -243,4 +243,89 @@ public class CartService {
 
         return buildCartResponse(cart);
     }
+
+
+    @Transactional
+    public CartResponse removeCartItem(Long cartItemId) {
+
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException("User doesn't exist"));
+
+        Cart cart = cartRepository.findByUserId(user.getId())
+                .orElseThrow(() ->
+                        new CartNotFoundException("Cart not found"));
+
+        CartItems cartItem = cartItemsRepository
+                .findByIdAndCartId(cartItemId, cart.getId())
+                .orElseThrow(() ->
+                        new CartNotFoundException("Cart item not found"));
+
+        Inventory inventory = inventoryRepository
+                .findByProductId(cartItem.getProduct().getId())
+                .orElseThrow(() ->
+                        new ProductNotFoundException("Inventory not found"));
+
+        int quantity = cartItem.getQuantity();
+
+        inventory.setQuantity(
+                inventory.getQuantity() + quantity
+        );
+
+        inventory.setReservedQuantity(
+                inventory.getReservedQuantity() - quantity
+        );
+
+        inventoryRepository.save(inventory);
+
+        cartItemsRepository.delete(cartItem);
+
+        return buildCartResponse(cart);
+    }
+
+    @Transactional
+    public CartResponse emptyCart(){
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException("User doesn't exist"));
+
+
+        Cart cart = cartRepository.findByUserId(user.getId())
+                .orElseThrow(() ->
+                        new CartNotFoundException("Cart not found"));
+        List<CartItems> cartItemsList = cartItemsRepository.findByCartId(cart.getId());
+
+        for (CartItems cartItem:cartItemsList){
+            int quantity = cartItem.getQuantity();
+
+            Inventory inventory = inventoryRepository
+                    .findByProductId(cartItem.getProduct().getId())
+                    .orElseThrow(() ->
+                            new ProductNotFoundException("Inventory not found"));
+
+            inventory.setQuantity(
+                    inventory.getQuantity() + quantity
+            );
+
+            inventory.setReservedQuantity(
+                    inventory.getReservedQuantity() - quantity
+            );
+            inventoryRepository.save(inventory);
+            cartItemsRepository.delete(cartItem);
+        }
+
+        return buildCartResponse(cart);
+
+
+    }
 }

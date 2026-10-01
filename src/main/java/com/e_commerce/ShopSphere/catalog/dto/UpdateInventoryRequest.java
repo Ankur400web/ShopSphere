@@ -14,4 +14,6 @@ public class UpdateInventoryRequest {
     @PositiveOrZero
     private int quantity;
 
+    @NotNull
+    private int version;
 }

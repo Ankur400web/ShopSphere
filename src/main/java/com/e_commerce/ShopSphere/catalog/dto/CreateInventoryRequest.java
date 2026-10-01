@@ -1,6 +1,7 @@
 package com.e_commerce.ShopSphere.catalog.dto;
 
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Getter;
@@ -14,6 +15,7 @@ public class CreateInventoryRequest {
     private Long productId;
 
     @NotNull
+    @Min(0)
     @PositiveOrZero
     private Integer quantity;
 }

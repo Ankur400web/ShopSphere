@@ -21,7 +21,7 @@ public class Inventory {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
-    private Product productId;
+    private Product product;
 
     @Column(nullable = false)
     private Integer quantity;

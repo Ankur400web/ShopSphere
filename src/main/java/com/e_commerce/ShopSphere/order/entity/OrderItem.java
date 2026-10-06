@@ -2,13 +2,17 @@ package com.e_commerce.ShopSphere.order.entity;
 
 import com.e_commerce.ShopSphere.catalog.entity.Product;
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "order_items")
 @NoArgsConstructor
+@Getter
+@Setter
 public class OrderItem {
 
     @Id

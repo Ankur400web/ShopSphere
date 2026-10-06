@@ -4,7 +4,9 @@ package com.e_commerce.ShopSphere.order.entity;
 import com.e_commerce.ShopSphere.enums.OrderStatus;
 import com.e_commerce.ShopSphere.user.entity.User;
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -12,6 +14,8 @@ import java.time.OffsetDateTime;
 @Entity
 @Table(name = "orders")
 @NoArgsConstructor
+@Getter
+@Setter
 public class Order {
 
     @Id

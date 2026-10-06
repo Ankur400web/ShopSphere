@@ -31,4 +31,18 @@ public class OrderResponse {
     private OffsetDateTime updatedAt;
 
     private List<OrderItemResponse> items;
+
+    private String shippingFullName;
+
+    private String shippingStreet;
+
+    private String shippingCity;
+
+    private String shippingState;
+
+    private String shippingPostalCode;
+
+    private String shippingCountry;
+
+    private String shippingPhoneNumber;
 }
